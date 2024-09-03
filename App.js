@@ -10,7 +10,7 @@ let hh = 0
 
 export default function App() {
 
-  const [numero, setNumero] = useState(0)
+  const [numero, setNumero] = useState('00:00:00')
   const [botao, setBotao] = useState('VAI')
   const [ultimo, setUltimo] = useState(null)
 
@@ -22,16 +22,42 @@ export default function App() {
     } else {
       timer = setInterval(() => {
         ss++
-        if (ss === 60) {
 
+        if (ss === 60) {
+          mm++
+          ss = 0
         }
-      }, 100)
+
+        if (mm === 60) {
+          mm = 0
+          hh++
+        }
+
+        let format = `${hh < 10 ? `0${hh}` : hh}:${mm < 10 ? `0${mm}` : mm}:${ss < 10 ? `0${ss}` : ss}`
+
+        setNumero(format)
+
+      }, 1000)
+
+      setBotao('PARAR')
     }
 
   }
 
   function limpar() {
+    if (timer !== null) {
+      clearInterval(timer)
+      timer = null
+    }
 
+    setUltimo(numero)
+
+    setNumero('00:00:00')
+    ss = 0;
+    mm = 0;
+    hh = 0;
+
+    setBotao('VAI')
   }
 
   return (
